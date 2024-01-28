@@ -19,16 +19,16 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   double imageHeight = 10;
   bool isFull = false;
-  bool isLogin = false;
+  bool isLogin = true;
 
   @override
   void initState() {
     super.initState();
     Timer(
         const Duration(milliseconds: 2000),
-        () => isLogin
-            ? Get.to(() => const LoginScreen(), duration: Duration.zero)
-            : Get.to(() => const AppNavigationBar(), duration: Duration.zero));
+        () => Get.offAll(() => isLogin
+            ? const AppNavigationBar()
+            : const LoginScreen())); // Go to Login Screen
     super.initState();
 
     Timer(

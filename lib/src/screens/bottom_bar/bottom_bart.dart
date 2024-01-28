@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simorbit_app/src/consts/colors.dart';
+import 'package:simorbit_app/src/controllers/call_controller.dart';
+import 'package:simorbit_app/src/controllers/message_controllers.dart';
 import 'package:simorbit_app/src/screens/calls/call_screen.dart';
 import 'package:simorbit_app/src/screens/messages/message_screen.dart';
 import 'package:simorbit_app/src/screens/settings/setting_screen.dart';
@@ -12,6 +15,8 @@ class AppNavigationBar extends StatefulWidget {
 }
 
 class _AppNavigationBarState extends State<AppNavigationBar> {
+  MessageController messageController = Get.put(MessageController());
+  CallController callController = Get.put(CallController());
   int _selectedIndex = 0;
 
   ///Navigation bar active icons path
@@ -52,7 +57,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
       resizeToAvoidBottomInset: false,
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
+        children: [
           MessageScreen(),
           CallScreen(),
           SettingScreen(),
