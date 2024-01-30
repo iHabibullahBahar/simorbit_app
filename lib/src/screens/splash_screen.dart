@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simorbit_app/src/consts/image_paths.dart';
+import 'package:simorbit_app/src/controllers/device_controller.dart';
 import 'package:simorbit_app/src/screens/bottom_bar/bottom_bart.dart';
 import 'package:simorbit_app/src/screens/login/login_screen.dart';
 
@@ -19,11 +20,17 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   double imageHeight = 10;
   bool isFull = false;
-  bool isLogin = true;
+  bool isLogin = false;
 
   @override
   void initState() {
     super.initState();
+    DeviceController.instance.isAnyDeviceAdded().then((value) {
+      setState(() {
+        isLogin = value;
+      });
+    });
+
     Timer(
         const Duration(milliseconds: 2000),
         () => Get.offAll(() => isLogin
@@ -46,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen>
     return Scaffold(
       body: Center(
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 500), // Provide the duration
+          duration: const Duration(milliseconds: 500), // Provide the duration
           height: imageHeight,
           width: imageHeight,
           // Use the properties stored in the State class.
