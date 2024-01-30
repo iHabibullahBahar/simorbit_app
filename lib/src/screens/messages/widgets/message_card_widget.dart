@@ -6,7 +6,7 @@ class MessageCardWidget extends StatelessWidget {
   String message;
   String time;
   String sender;
-  int slot;
+  String slot;
   MessageCardWidget(
       {super.key,
       required this.message,
@@ -40,7 +40,7 @@ class MessageCardWidget extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
-                        child: Text("Slot: $slot"),
+                        child: Text("IMEI: $slot"),
                       )),
                 ],
               ),

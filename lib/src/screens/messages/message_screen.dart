@@ -6,19 +6,26 @@ import 'package:simorbit_app/src/controllers/message_controllers.dart';
 import 'package:simorbit_app/src/screens/common_widgets/shimmer.dart';
 import 'package:simorbit_app/src/screens/messages/widgets/message_card_widget.dart';
 
-class MessageScreen extends StatelessWidget {
+class MessageScreen extends StatefulWidget {
   MessageScreen({super.key});
-  List<String> messages = [
-    "Hello Habib, How are you?",
-    "I am going to the market",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
-    "That was a great day",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
-    "Have you seen the new movie?",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
-  ];
+
+  @override
+  State<MessageScreen> createState() => _MessageScreenState();
+}
+
+class _MessageScreenState extends State<MessageScreen> {
+  MessageController messageController = Get.put(MessageController());
+  // List<String> messages = [
+  //   "Hello Habib, How are you?",
+  //   "I am going to the market",
+  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+  //   "That was a great day",
+  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+  //   "Have you seen the new movie?",
+  //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec",
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -69,12 +76,20 @@ class MessageScreen extends StatelessWidget {
                       )
                     : Column(
                         children: [
-                          for (int i = 0; i < messages.length; i++)
+                          for (int i = 0;
+                              i <
+                                  MessageController
+                                      .instance.messageModel.data!.length;
+                              i++)
                             MessageCardWidget(
-                              message: messages[i],
+                              message: MessageController
+                                  .instance.messageModel.data![i].content!,
                               time: "28/08/2021 12:00",
-                              sender: "+8801701121278",
-                              slot: 1,
+                              sender: MessageController
+                                  .instance.messageModel.data![i].phoneNo!,
+                              slot: MessageController
+                                  .instance.messageModel.data![i].imei
+                                  .toString(),
                             ),
                         ],
                       ),

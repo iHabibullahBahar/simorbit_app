@@ -13,6 +13,7 @@ class DeviceController extends GetxController {
   RxBool isLoading = false.obs;
   TextEditingController imeiTextController = TextEditingController();
   List<DeviceInfo> globalDevices = [];
+  List<int> deviceIds = [];
 
   @override
   void onInit() {
@@ -90,7 +91,11 @@ class DeviceController extends GetxController {
     List<DeviceInfo> devices = devicesJson
         .map((jsonString) => DeviceInfo.fromJson(json.decode(jsonString)))
         .toList();
-
+    globalDevices = devices;
+    for (DeviceInfo device in devices) {
+      deviceIds.add(int.parse(device.deviceId));
+    }
+    print(deviceIds);
     return devices;
   }
 
