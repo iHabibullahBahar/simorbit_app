@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simorbit_app/src/consts/colors.dart';
 import 'package:simorbit_app/src/controllers/call_controller.dart';
+import 'package:simorbit_app/src/controllers/device_controller.dart';
 import 'package:simorbit_app/src/controllers/message_controllers.dart';
 import 'package:simorbit_app/src/screens/calls/call_screen.dart';
 import 'package:simorbit_app/src/screens/messages/message_screen.dart';
 import 'package:simorbit_app/src/screens/settings/setting_screen.dart';
 
 class AppNavigationBar extends StatefulWidget {
-  const AppNavigationBar({super.key});
+  int selectedIndex;
+  AppNavigationBar({this.selectedIndex = 0});
 
   @override
   State<AppNavigationBar> createState() => _AppNavigationBarState();
@@ -17,7 +19,6 @@ class AppNavigationBar extends StatefulWidget {
 class _AppNavigationBarState extends State<AppNavigationBar> {
   MessageController messageController = Get.put(MessageController());
   CallController callController = Get.put(CallController());
-  int _selectedIndex = 0;
 
   ///Navigation bar active icons path
   List<IconData> selectedIcons = [
@@ -56,7 +57,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       body: IndexedStack(
-        index: _selectedIndex,
+        index: widget.selectedIndex,
         children: [
           MessageScreen(),
           CallScreen(),
@@ -87,9 +88,20 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                 highlightColor: Colors.transparent,
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 onTap: () {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
+                  setState(
+                    () {
+                      widget.selectedIndex = index;
+                      if (widget.selectedIndex == 0) {
+                        messageController.fetchMessages();
+                      }
+                      if (widget.selectedIndex == 1) {
+                        callController.fetchMessages();
+                      }
+                      if (widget.selectedIndex == 2) {
+                        DeviceController.instance.getDevices();
+                      }
+                    },
+                  );
                 },
                 child: SizedBox(
                   width: 60,
@@ -97,7 +109,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        _selectedIndex == index
+                        widget.selectedIndex == index
                             ? selectedIcons[index]
                             : unselectedIcons[index],
                         size: 20,
@@ -107,7 +119,7 @@ class _AppNavigationBarState extends State<AppNavigationBar> {
                         child: Text(
                           selectedLabels[index],
                           style: TextStyle(
-                            color: _selectedIndex == index
+                            color: widget.selectedIndex == index
                                 ? zGraySwatch[900]
                                 : zGraySwatch[500],
                             fontSize: 10,

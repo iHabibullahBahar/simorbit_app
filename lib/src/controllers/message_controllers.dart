@@ -18,15 +18,23 @@ class MessageController extends GetxController {
   }
 
   void fetchMessages() async {
+    String ids = "";
+    List<DeviceInfo> devices = await DeviceController.instance.getDevices();
+    for (int i = 0; i < devices.length; i++) {
+      ids += devices[i].deviceId.toString();
+      if (i != devices.length - 1) {
+        ids += ",";
+      }
+    }
     isLoading.value = true;
     try {
-      String ids = "";
-      for (int i = 0; i < DeviceController.instance.deviceIds.length; i++) {
-        ids += DeviceController.instance.deviceIds[i].toString();
-        if (i != DeviceController.instance.deviceIds.length - 1) {
-          ids += ",";
-        }
-      }
+      // String ids = "";
+      // for (int i = 0; i < DeviceController.instance.deviceIds.length; i++) {
+      //   ids += DeviceController.instance.deviceIds[i].toString();
+      //   if (i != DeviceController.instance.deviceIds.length - 1) {
+      //     ids += ",";
+      //   }
+      // }
       var body = {"secret": "X1766086542124389214", "ids": ids};
       var response = await http.post(
           Uri.parse("https://www.simorbit.devsfolder.com/api/v11/messages/"),

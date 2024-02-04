@@ -20,21 +20,21 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   double imageHeight = 10;
   bool isFull = false;
-  bool isLogin = false;
+  bool isThereAnyDevices = false;
 
   @override
   void initState() {
     super.initState();
     DeviceController.instance.isAnyDeviceAdded().then((value) {
       setState(() {
-        isLogin = value;
+        isThereAnyDevices = value;
       });
     });
 
     Timer(
         const Duration(milliseconds: 2000),
-        () => Get.offAll(() => isLogin
-            ? const AppNavigationBar()
+        () => Get.offAll(() => isThereAnyDevices
+            ? AppNavigationBar()
             : const LoginScreen())); // Go to Login Screen
     super.initState();
 

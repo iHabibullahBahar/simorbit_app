@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simorbit_app/src/consts/colors.dart';
 import 'package:simorbit_app/src/consts/sizes.dart';
+import 'package:simorbit_app/src/controllers/device_controller.dart';
+import 'package:simorbit_app/src/screens/login/login_screen.dart';
 import 'package:simorbit_app/src/screens/settings/widgets/add_new_slot_widget.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -18,6 +20,15 @@ class _SettingScreenState extends State<SettingScreen> {
       appBar: AppBar(
         backgroundColor: zWhiteColor,
         elevation: 0,
+        actions: [],
+        centerTitle: true,
+        title: const Text(
+          "Settings",
+          style: TextStyle(
+            color: zTextColor,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(zDefaultPadding),
@@ -37,7 +48,9 @@ class _SettingScreenState extends State<SettingScreen> {
             const SizedBox(
               height: 10,
             ),
-            for (int i = 0; i < 3; i++)
+            for (int i = 0;
+                i < DeviceController.instance.globalDevices.length;
+                i++)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Container(
@@ -54,7 +67,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           width: 10,
                         ),
                         Text(
-                          "IMEI: 394734374200238$i",
+                          "IMEI: ${DeviceController.instance.globalDevices[i].imei}",
                           style: const TextStyle(
                             color: zTextColor,
                             fontSize: 16,
@@ -62,8 +75,28 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                         Spacer(),
                         InkWell(
-                          onTap: () {
-                            ///TODO: Delete the card
+                          onTap: () async {
+                            DeviceInfo newDevice = DeviceInfo(
+                                imei: DeviceController
+                                    .instance.globalDevices[i].imei,
+                                deviceId: DeviceController
+                                    .instance.globalDevices[i].deviceId);
+                            DeviceController.instance.removeDevice(newDevice);
+
+                            await Future.delayed(const Duration(seconds: 1));
+                            setState(() {});
+                            bool isanyDevice = await DeviceController.instance
+                                .isAnyDeviceAdded();
+                            if (!isanyDevice) {
+                              Get.snackbar(
+                                "All slots are removed",
+                                "Please add a new slot",
+                                backgroundColor: Colors.green,
+                                colorText: zWhiteColor,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                              Get.offAll(() => const LoginScreen());
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(
@@ -89,7 +122,9 @@ class _SettingScreenState extends State<SettingScreen> {
               height: 50,
               child: ElevatedButton(
                   onPressed: () {
-                    _showNewSlotWidget();
+                    setState(() {
+                      Get.to(() => AddNewSlotWidget());
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: zPrimaryColor,
@@ -97,7 +132,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -107,14 +142,14 @@ class _SettingScreenState extends State<SettingScreen> {
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 10,
                       ),
                       Icon(
                         Icons.add,
                         color: zWhiteColor,
                         size: 20,
-                      )
+                      ),
                     ],
                   )),
             )
@@ -133,17 +168,10 @@ class _SettingScreenState extends State<SettingScreen> {
           onTap: () {
             Get.back();
           },
-          child: Center(
-            child: Container(
-              height: Get.height,
-              width: Get.width,
-              color: Colors.transparent,
-              child: GestureDetector(
-                ///This will prevent the dialog box to close when user taps inside the dialog box
-                onTap: () {},
-                child: const Center(child: AddNewSlotWidget()),
-              ),
-            ),
+          child: GestureDetector(
+            ///This will prevent the dialog box to close when user taps inside the dialog box
+            onTap: () {},
+            child: AddNewSlotWidget(),
           ),
         );
       },

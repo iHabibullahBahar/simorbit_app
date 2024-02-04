@@ -42,6 +42,16 @@ class DeviceController extends GetxController {
       );
       var data = response.body;
       final decodedData = jsonDecode(data);
+      if (decodedData['status'] == "false") {
+        Get.snackbar(
+          "Error",
+          "IMEI not found",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
       loginModel = LoginModel.fromJson(decodedData);
       if (loginModel.status == "true") {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -82,6 +92,14 @@ class DeviceController extends GetxController {
     devicesJson.add(json.encode(devicee.toJson()));
 
     await prefs.setStringList('devices', devicesJson);
+    Get.snackbar(
+      "Success",
+      "Device added successfully",
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 2),
+      colorText: Colors.white,
+    );
   }
 
   Future<List<DeviceInfo>> getDevices() async {
@@ -95,7 +113,7 @@ class DeviceController extends GetxController {
     for (DeviceInfo device in devices) {
       deviceIds.add(int.parse(device.deviceId));
     }
-    print(deviceIds);
+
     return devices;
   }
 

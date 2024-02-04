@@ -34,14 +34,15 @@ class CallScreen extends StatelessWidget {
         title: const Text("Calls",
             style: TextStyle(
               color: zTextColor,
-              fontWeight: FontWeight.w600,
             )),
         centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                CallController.instance.fetchMessages();
+              },
               icon: const Icon(
                 Icons.refresh_outlined,
                 color: zTextColor,
@@ -72,11 +73,18 @@ class CallScreen extends StatelessWidget {
                       )
                     : Column(
                         children: [
-                          for (int i = 0; i < calls.length; i++)
+                          for (int i = 0;
+                              i <
+                                  CallController
+                                      .instance.callModel.data!.length;
+                              i++)
                             CallCardWidget(
-                              time: "28/08/2021 12:00",
-                              sender: "+8801701121278",
-                              slot: 1,
+                              time: CallController
+                                  .instance.callModel.data![i].createdAt!,
+                              sender: CallController
+                                  .instance.callModel.data![i].phoneNo!,
+                              slot: CallController
+                                  .instance.callModel.data![i].imei!,
                             ),
                         ],
                       ),

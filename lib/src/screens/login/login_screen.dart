@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:simorbit_app/src/consts/colors.dart';
 import 'package:simorbit_app/src/consts/sizes.dart';
 import 'package:simorbit_app/src/controllers/device_controller.dart';
+import 'package:simorbit_app/src/screens/bottom_bar/bottom_bart.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -72,12 +73,20 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (DeviceController
                               .instance.imeiTextController.text.length >
                           12) {
                         DeviceController.instance.checkIMEI(
                             DeviceController.instance.imeiTextController.text);
+                        await Future.delayed(const Duration(seconds: 1));
+                        if (await DeviceController.instance
+                            .isAnyDeviceAdded()) {
+                          Get.offAll(
+                            () => AppNavigationBar(),
+                          );
+                          DeviceController.instance.imeiTextController.clear();
+                        }
                       } else {
                         Get.snackbar(
                           "Error",

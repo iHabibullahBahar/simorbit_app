@@ -6,6 +6,10 @@ class LoginModel {
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
+    if (json['data'] == []) {
+      data = null;
+      return;
+    }
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 

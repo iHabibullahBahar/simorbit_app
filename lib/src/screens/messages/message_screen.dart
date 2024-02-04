@@ -38,14 +38,15 @@ class _MessageScreenState extends State<MessageScreen> {
         title: const Text("Messages",
             style: TextStyle(
               color: zTextColor,
-              fontWeight: FontWeight.w600,
             )),
         centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                MessageController.instance.fetchMessages();
+              },
               icon: const Icon(
                 Icons.refresh_outlined,
                 color: zTextColor,
@@ -84,7 +85,8 @@ class _MessageScreenState extends State<MessageScreen> {
                             MessageCardWidget(
                               message: MessageController
                                   .instance.messageModel.data![i].content!,
-                              time: "28/08/2021 12:00",
+                              time: MessageController
+                                  .instance.messageModel.data![i].createdAt!,
                               sender: MessageController
                                   .instance.messageModel.data![i].phoneNo!,
                               slot: MessageController

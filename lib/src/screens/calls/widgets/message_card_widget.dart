@@ -4,7 +4,7 @@ import 'package:simorbit_app/src/consts/colors.dart';
 class CallCardWidget extends StatelessWidget {
   String time;
   String sender;
-  int slot;
+  String slot;
   CallCardWidget(
       {super.key,
       required this.time,
@@ -45,7 +45,7 @@ class CallCardWidget extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 4),
-                            child: Text("Slot: $slot"),
+                            child: Text("IMEI: $slot"),
                           )),
                       const SizedBox(height: 8),
                       Row(
